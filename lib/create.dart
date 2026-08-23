@@ -49,8 +49,10 @@ TextFormField(controller: color,
         textColor: Colors.black,
         color: AppColors.secndryColor,
         onPressed:()async{
-         int response= await sqlDB.insertData('''INSERT INTO NOTES (title,content,color)
-         VALUES ('${title.text}' , '${note.text}' , '${color.text}')''');
+         int response= await sqlDB.insert("NOTES", {
+         "content":"${note.text}",
+        "title":"${title.text}",
+        "color":"${color.text}"});
          print(response);
 if(response>0){
   print("ok");

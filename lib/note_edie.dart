@@ -65,11 +65,14 @@ TextFormField(controller: color,
         textColor: Colors.black,
         color: AppColors.secndryColor,
         onPressed:()async{
-         int response= await sqlDB.insertData('''UPDATE NOTES title="${title.text}",content="${note.text}",color="${color.text} 
-         WHERE id =${widget.id}")''');
+         int response= await sqlDB.update("NOTES", {
+         "content":"${note.text}",
+        "title":"${title.text}",
+        "color":"${color.text}"}, "id=${widget.id}");
          print(response);
 if(response > 0){
-  Navigator.pushReplacement( context,MaterialPageRoute(builder: (context) => const Home()));
+  Navigator.pushReplacement(context,
+  MaterialPageRoute(builder: (context) => const Home()));
 }
         
         },

@@ -40,7 +40,7 @@ print('onupgrate');
             content TEXT NOT NULL,
             color TEXT, )
         ''');
-        
+
     print('creat database');
 
        await batch.commit();
@@ -48,25 +48,32 @@ print('onupgrate');
 
 
   }
-
-  readData(String sql)async{
-    Database? mydb=await db;
-List<Map> response= await mydb!.rawQuery(sql);
+read(String table )async{
+  Database? mydb=await db;
+  List<Map> response= await mydb!.query(table);
 return response;
-  }
-
-
-  insertData(String sql)async{
-    Database? mydb=await db;
-int response= await mydb!.rawInsert(sql);
+ }
+ 
+  
+ insert(String table ,Map<String, Object?>values)async{
+  Database? mydb=await db;
+  int response= await mydb!.insert(table,values);
 return response;
-  }
+ }
 
-    updateData(String sql)async{
-    Database? mydb=await db;
-int response= await mydb!.rawUpdate(sql);
+update(String table ,Map<String, Object?>values,mywhere)async{
+  Database? mydb=await db;
+  int response= await mydb!.update(table,values,where: mywhere);
 return response;
-  }
+ }
+ 
+  delete(String table ,mywhere)async{
+  Database? mydb=await db;
+  int response= await mydb!.delete(table , where: mywhere);
+return response;
+ }
+ 
+  
 
    deleteData(String sql)async{
     Database? mydb=await db;

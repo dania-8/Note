@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:letter/bar.dart';
-import 'package:letter/contcard.dart';
-import 'package:letter/create.dart';
+
 import 'package:letter/db.dart';
 import 'package:letter/styedButton.dart';
+import 'package:letter/theme.dart';
 import 'textStyle.dart';
 import 'note_edie.dart';
 class Home extends StatefulWidget {
@@ -20,14 +19,16 @@ bool isloading =true;
 
 Db sqlDB=Db();
 
-List notes=[];
+List Notes=[];
 
 Future readData()async{
-  List<Map>response=await sqlDB.readData("SELECT * FROM NOTES");
+  List<Map>response=await sqlDB.read("NOTES");
   isloading=false;
-  notes.addAll(response);
+print(Notes);
+  Notes.addAll(response);
+
   if(this.mounted){
-    setState(() { 
+    setState(() {
     });
   }
 
@@ -58,51 +59,56 @@ child: Icon(Icons.add),),
                 children: [
               
                    ListView.builder(
-                        itemCount: notes.length,
-                      
+                  
+                        itemCount: Notes.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text("${notes[index]['title']}"),
-                            subtitle: Text("${notes[index]['content']}"),
-                            trailing:  Padding(
+                          return Card(color: AppColors.primaryAccent,
+                            child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                   IconButton(onPressed: () async{
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>noteedie(note: notes[index]['note'],
-                                    color: notes[index]['color'],title: notes[index]['title'],id: notes[index]['id'],)));}, icon: Icon(Icons.edit)),
-                                  
-                                  IconButton(onPressed:
-                                  
-                                   ()async{await showDialog(context: context, builder: (ctx){
-                                    return AlertDialog(
-                                      title:  Styleheading("Delete"),
-                                      content:  const Stylebody("Do you want to delete this note"),
-                                      actions: [
-                                        Row(
-                                          children: [
-                                  StyledButton(onPressed: ()async{
-                                     int response =await sqlDB.deleteData("DELETE FROM NOTES WHERE 'id'='${notes[index]['id']}' ");
-                                     if(response>0){
-                                      notes.removeWhere((element)=>element['id']==notes[index]['id']);
-                                     }
-                                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Home()));
-                                     },
-                                   child:  Text("Delete")),
-                                                      
-                                   StyledButton(onPressed: (){
-                                     Navigator.pop(ctx);
-                                   }, child: Text("cancel"))
-                                ],
-                              )
-                                                      ],
-                                    );
-                                   });},
-                                      icon:  Icon(Icons.delete))
-                                ],
+                              child: ListTile(
+                                title: Text("${Notes[index]['title']}"),
+                                subtitle: Text("${Notes[index]['content']}"),
+                                trailing:  Row(crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                     IconButton(onPressed: () async{
+                                      Navigator.push(context, MaterialPageRoute(builder: 
+                                      (context)=>noteedie(note: Notes[index]['content'],
+                                      color: Notes[index]['color'],title: Notes[index]['title'],
+                                      id: Notes[index]['id'],)));}, icon: Icon(Icons.edit)),
+                                    
+                                    IconButton(onPressed:
+                                    ()async{await showDialog(context: context, builder: (ctx){
+                                      return AlertDialog(
+                                        title:  Styleheading("Delete"),
+                                        content:  const Stylebody("Do you want to delete this note"),
+                                        actions: [
+                                          Row(
+                                            children: [
+                                    StyledButton(onPressed: ()async{
+                                       int response =await sqlDB.delete("NOTES", "id=${Notes[index]['id']}");
+                                       if(response>0){
+                                         Notes.removeWhere((element)=>element['id']==Notes[index]['id']);
+                                       }
+                                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const Home()));
+                                       },
+                                     child:  Text("Delete")),
+                                                        
+                                     StyledButton(onPressed: (){
+                                       Navigator.pop(ctx);
+                                     }, child: Text("cancel"))
+                                  ],
+                                ) ],
+                                      );
+                                     });},
+                                        icon:  Icon(Icons.delete))
+                                  ],
+                                ),
+                                        
                               ),
                             ),
-                                    
                           );
                         } ,
                       )
