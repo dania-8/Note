@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
-  static Color primaryColor = const Color.fromARGB(255, 200, 237, 255);
+  static Color primaryColor = const Color(0xFFC8EDFF);
   static Color primaryAccent = const Color.fromARGB(255, 239, 199, 119);
 static Color secndryColor = const Color.fromARGB(255, 125, 195, 230);
 static Color secndryAccent = const Color(0xFFFFF7EB);
 
 static Color titleColor =const Color.fromARGB(255, 0, 0, 0);
 
-static Color textColor =const Color.fromARGB(255, 169, 137, 74);
+static Color textColor =const Color.fromARGB(255, 255, 220, 149);
 
 
 

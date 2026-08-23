@@ -28,9 +28,7 @@ Db sqlDB= Db();
       int response =await sqlDB.updateData("UPDATE NOTES SET ");
     }, icon: Icon(Icons.edit)),
      IconButton(onPressed: ()async{
-            int response =await sqlDB.deleteData("DELETE FROM NOTES WHERE 'id'= ");
-
-     }, icon:  Icon(Icons.delete))
+            int response =await sqlDB.deleteData("DELETE FROM NOTES WHERE 'id'= ");},icon:  Icon(Icons.delete))
           ]),
           TextButton(
             child:Card(child: Text(

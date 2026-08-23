@@ -30,26 +30,23 @@ print('onupgrate');
 
 
   _onCreate(Database db,int version)async{
-   await db.execute('''
-          CREATE TABLE "PROFILE" (
-            "profileid" INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "profilename" TEXT NOT NULL,
-            "gender" TEXT NOT NULL,
-          )
-        ''');
 
-        await db.execute('''
+    Batch batch=db.batch();
+
+        batch.execute('''
           CREATE TABLE "NOTES" (
-            "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            "title" TEXT NOT NULL,
-            "content" TEXT NOT NULL,
-profileid INTEGER,
-CONSTRAINT fkprofile
-    FOREIGN KEY (profileid)
-    REFERENCES PROFILE(profileid)
-       ON DELETE CASCADE )
+            id INTEGER PRIMARY KEY AUTOINCREMENT ,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            color TEXT, )
         ''');
+        
+    print('creat database');
+
+       await batch.commit();
         print('creat database');
+
+
   }
 
   readData(String sql)async{

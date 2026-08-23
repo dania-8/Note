@@ -4,26 +4,42 @@ import 'package:letter/home.dart';
 import 'package:letter/textStyle.dart';
 import 'package:letter/theme.dart';
 
-class Create extends StatefulWidget {
-  const Create({super.key});
+class noteedie extends StatefulWidget {
+  final note;
+  final title;
+  final id;
+  final color;
+
+  const noteedie({super.key, this.note, this.title, this.id, this.color,
+  
+  });
 
   @override
-  State<Create> createState() => _CreateState();
+  State<noteedie> createState() => _noteedieState();
 }
 
-class _CreateState extends State<Create> {
-
+class _noteedieState extends State<noteedie> {
+  
 Db sqlDB=Db();
-
-  GlobalKey<FormState>formstate=GlobalKey();
+ GlobalKey<FormState>formstate=GlobalKey();
   TextEditingController note=TextEditingController();
   TextEditingController title=TextEditingController();
   TextEditingController color=TextEditingController();
   @override
+  void initState(){
+    note.text=widget.note;
+    title.text=widget.title;
+    color.text=widget.color;
+
+super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-appBar: AppBar(title: Text("New Note"),),
-body:Container(
+      appBar: AppBar(title: Text('Edit Note'),),
+
+      body: Container(
   padding: EdgeInsets.all(10),
   child: ListView(children: [
     Form(
@@ -49,17 +65,15 @@ TextFormField(controller: color,
         textColor: Colors.black,
         color: AppColors.secndryColor,
         onPressed:()async{
-         int response= await sqlDB.insertData('''INSERT INTO NOTES (title,content,color)
-         VALUES ('${title.text}' , '${note.text}' , '${color.text}')''');
+         int response= await sqlDB.insertData('''UPDATE NOTES title="${title.text}",content="${note.text}",color="${color.text} 
+         WHERE id =${widget.id}")''');
          print(response);
-if(response>0){
-  print("ok");
-  Navigator.pushReplacement( context,
-            MaterialPageRoute(builder: (context) => const Home()));
+if(response > 0){
+  Navigator.pushReplacement( context,MaterialPageRoute(builder: (context) => const Home()));
 }
         
         },
-      child: Stylebody("Save"),)
+      child: Stylebody("Save Edit"),)
     ],
     )
     )
