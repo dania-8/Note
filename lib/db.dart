@@ -17,7 +17,7 @@ Future<Database?>get db async{
   intialDb() async{
 String dbpath =await getDatabasesPath();
  String path=join(dbpath,'letter.db');
- Database mydb=await openDatabase(path,onCreate: _onCreate,version: 1,onUpgrade: _onUpgrade);
+ Database mydb=await openDatabase(path,onCreate: _onCreate,version: 3,onUpgrade: _onUpgrade,onConfigure: _onConfigure);
 
  return mydb;
 
@@ -28,17 +28,36 @@ _onUpgrade(Database db,int oldversion,int newvrsion){
 print('onupgrate');
 }
 
+Future<void> _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
 
   _onCreate(Database db,int version)async{
 
     Batch batch=db.batch();
-
+ batch.execute('''
+          CREATE TABLE "PROFILE" (
+            "profileid" INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+            "profilename" TEXT NOT NULL,
+            "profileemail" TEXT NOT NULL,
+            "password" TEXT NOT NULL,
+            "gender" TEXT NOT NULL,
+            "age" INTEGER NOT NULL,
+            "image" TEXT
+          )
+        ''');
         batch.execute('''
           CREATE TABLE "NOTES" (
             id INTEGER PRIMARY KEY AUTOINCREMENT ,
             title TEXT NOT NULL,
             content TEXT NOT NULL,
-            color TEXT, )
+            color TEXT,
+            profileid INTEGER,
+CONSTRAINT fkprofile
+    FOREIGN KEY (profileid)
+    REFERENCES PROFILE(profileid)
+       ON DELETE CASCADE 
+             )
         ''');
 
     print('creat database');
@@ -73,11 +92,12 @@ return response;
 return response;
  }
  
-  
-
-   deleteData(String sql)async{
-    Database? mydb=await db;
-int response= await mydb!.rawDelete(sql);
+  getNotesProfile(String table,mywhere )async{
+  Database? mydb=await db;
+  List<Map> response= await mydb!.query(table,where: mywhere);
 return response;
   }
+
+   
+  
 }

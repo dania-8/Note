@@ -5,7 +5,8 @@ import 'package:letter/textStyle.dart';
 import 'package:letter/theme.dart';
 
 class Create extends StatefulWidget {
-  const Create({super.key});
+  final profileId;
+  const Create({super.key, this.profileId});
 
   @override
   State<Create> createState() => _CreateState();
