@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letter/create.dart';
+import 'package:letter/create_screen.dart';
 
 import 'package:letter/db.dart';
 import 'package:letter/styedButton.dart';
@@ -7,15 +7,15 @@ import 'package:letter/theme.dart';
 import 'textStyle.dart';
 import 'note_edie.dart';
 
-class Home extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   final currentProfileId;
-  const Home({super.key, this.currentProfileId});
+  const HomeScreen({super.key, this.currentProfileId});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   bool isloading = true;
 
   Db sqlDB = Db();
@@ -189,13 +189,7 @@ if(currentProfileId==null){
                                                           );
                                                           await readData();
                                                         }
-                                                        Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const Home(),
-                                                          ),
-                                                        );
+                                                        Navigator.pop(context);
                                                       },
                                                       child: Text("Delete"),
                                                     ),
